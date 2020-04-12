@@ -16,6 +16,8 @@
     "react-native-gesture-handler": "^1.6.1",
     "react-native-html-parser": "^0.1.0",
     "react-native-push-notification": "^3.1.9",
+    "react-native-render-html": "^4.2.0",
+    "react-native-webview": "^9.1.4",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
