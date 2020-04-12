@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, Image} from 'react-native';
+import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
 import cheerio from 'react-native-cheerio';
-import DOMParser from 'react-native-html-parser';
-import {} from 'react-native-gesture-handler';
 
 const App = () => {
   const [news, setNews] = useState([]);
@@ -40,8 +38,6 @@ const App = () => {
         href,
       });
     });
-
-    // console.log('news', news);
     setNews(newsList);
   };
 
@@ -49,15 +45,30 @@ const App = () => {
     getHtml();
   }, []);
 
+  const fullUrl = 'http://www.xachmaz-ih.gov.az';
   return (
     <View style={{flex: 1}}>
       <ScrollView style={{flex: 1}}>
-        {news.map(({title}) => {
+        {news.slice(0, 5).map(({title, thumbnailURL}) => {
           return (
-            <View
-              style={{width: '100%', height: 80, backgroundColor: '#458969'}}>
-              <Text>{title}</Text>
-            </View>
+            <TouchableOpacity
+              style={{
+                width: '100%',
+                height: 80,
+                marginBottom: 10,
+                backgroundColor: '#458969',
+                flexDirection: 'row',
+              }}>
+              <View style={{flex: 0.2, backgroundColor: 'red'}}>
+                <Image
+                  style={{width: '100%', height: '100%'}}
+                  source={{uri: `${fullUrl}` + thumbnailURL}}
+                />
+              </View>
+              <View style={{flex: 0.8, backgroundColor: 'blue'}}>
+                <Text>{title}</Text>
+              </View>
+            </TouchableOpacity>
           );
         })}
       </ScrollView>
