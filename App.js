@@ -36,7 +36,7 @@ const App = () => {
     const fetchNews = async () => {
       setStatus(states.pending);
       try {
-        const searchUrl = `http://www.xachmaz-ih.gov.az/news/364.html`;
+        const searchUrl = `http://www.xachmaz-ih.gov.az/news/349.html`;
         const response = await fetch(searchUrl);
         const htmlString = await response.text();
         const $ = cheerio.load(htmlString);
@@ -54,6 +54,33 @@ const App = () => {
     };
     fetchNews();
   }, []);
+
+  const renderHTML = comp => {
+    try {
+      if (Array.isArray(comp)) return comp.map(renderHTML);
+
+      const tagName = comp.type.displayName.toLowerCase();
+
+      if (tagName === 'text') return <Text>{comp}</Text>;
+
+      const {children, source} = comp.props;
+
+      if (tagName === 'image') {
+        return (
+          <Image
+            key={comp.key}
+            resizeMode="cover"
+            source={{uri: source.uri}}
+            style={{width: '100%', height: 250, paddingBottom: 10}}
+          />
+        );
+      } else if (Array.isArray(children)) {
+        return children.map(renderHTML);
+      }
+    } catch (e) {
+      return null;
+    }
+  };
 
   if (status === states.pending || status === states.initial) {
     return (
@@ -73,38 +100,28 @@ const App = () => {
 
   return (
     <View style={{flex: 1}}>
-      {/* <Image
-        resizeMode="center"
-        style={{width: '100%', height: '100%'}}
-        source={{uri: DOMAIN + '/files/news' + news[0].imgId}}
-        // source={{uri: DOMAIN + '/files/news/small' + news[0].imgId}}
-      /> */}
-      <ScrollView style={{flex: 1}}>
+      <ScrollView
+        style={{
+          flex: 1,
+          paddingLeft: 10,
+          paddingRight: 10,
+        }}>
         <HTML
           html={pageContent}
           renderers={{
-            // p: props => {
-            //   return <Text>jgjh</Text>;
-            // },
+            p: (attr, children) => (children ? children.map(renderHTML) : null),
             img: ({src}) => {
               return (
                 <Image
-                  resizeMode="contain"
+                  resizeMode="cover"
                   source={{uri: src}}
-                  style={{width: '100%', height: 150}}
+                  style={{width: '100%', height: 250, paddingBottom: 10}}
                 />
               );
             },
           }}
-          // imagesMaxWidth={300}
-          // tagsStyles={{
-          //   img: {
-          //     width: 300,
-          //   },
-          // }}
         />
       </ScrollView>
-      <Text>sdsd</Text>
 
       {/* <ScrollView style={{flex: 1}}>
         {news.slice(0, 5).map(({title, thumbnailURL, url, date}) => {
