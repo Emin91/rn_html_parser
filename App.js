@@ -46,18 +46,20 @@ const App = () => {
           const thumbnailURL = $(node)
             .find('.news-thumb')
             .attr('src');
+          const imgId = thumbnailURL.slice(thumbnailURL.lastIndexOf('/'));
 
           newsList.push({
             title,
             date,
             description,
-            thumbnailURL,
+            imgId,
             url,
           });
         });
         setNews(newsList);
         setStatus(states.completed);
       } catch (e) {
+        console.log('e', e);
         setStatus(states.error);
       }
     };
@@ -82,8 +84,14 @@ const App = () => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView style={{flex: 1}}>
-        {news.slice(0, 5).map(({title, thumbnailURL, url}) => {
+      <Image
+        resizeMode="center"
+        style={{width: '100%', height: '100%'}}
+        source={{uri: DOMAIN + '/files/news' + news[0].imgId}}
+        // source={{uri: DOMAIN + '/files/news/small' + news[0].imgId}}
+      />
+      {/* <ScrollView style={{flex: 1}}>
+        {news.slice(0, 5).map(({title, thumbnailURL, url, date}) => {
           return (
             <TouchableOpacity
               style={{
@@ -102,12 +110,12 @@ const App = () => {
               </View>
               <View style={{flex: 0.8, backgroundColor: 'blue'}}>
                 <Text numberOfLines={1}>{title}</Text>
-                <Text numberOfLines={3}>{title}</Text>
+                <Text numberOfLines={3}>{date}</Text>
               </View>
             </TouchableOpacity>
           );
         })}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 };
